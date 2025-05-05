@@ -381,6 +381,7 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
     }
   }
 }
+
 resource frontendAppServicePlan 'Microsoft.Web/serverfarms@2021-02-01' = {
   name: format(uniqueNameFormat, 'frontend-plan')
   location: location
