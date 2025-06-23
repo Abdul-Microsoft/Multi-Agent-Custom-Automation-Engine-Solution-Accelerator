@@ -115,8 +115,8 @@ jobs:
             --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
             --template-file infra/main.bicep \
             --parameters \
-              solutionPrefix=${{ env.SOLUTION_PREFIX }} \
-              location=${{ env.AZURE_LOCATION }} \
+              solutionPrefix='${{ env.SOLUTION_PREFIX }}' \
+              azureOpenAILocation='${{ env.AZURE_LOCATION }}' \
               virtualMachineConfiguration='{"adminUsername": "adminuser", "adminPassword": "P@ssw0rd1234"}'
               logAnalyticsWorkspaceConfiguration='{"existingWorkspaceResourceId": ""}' \
 
