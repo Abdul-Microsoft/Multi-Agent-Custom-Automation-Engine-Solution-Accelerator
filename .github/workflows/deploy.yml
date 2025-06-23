@@ -105,12 +105,6 @@ jobs:
           echo "SOLUTION_PREFIX=${UNIQUE_SOLUTION_PREFIX}" >> $GITHUB_ENV
           echo "Generated SOLUTION_PREFIX: ${UNIQUE_SOLUTION_PREFIX}"
           
-
-      - name: Build .bicepparam to JSON
-        run: |
-          az bicep install
-          bicep build infra/main.bicepparam --outfile infra/temp.parameters.json
-
           
       - name: Deploy Bicep Template
         id: deploy
@@ -119,9 +113,15 @@ jobs:
           az deployment group create \
             --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
             --template-file infra/main.bicep \
-            --parameters @infra/temp.parameters.json \
-            --parameters azureOpenAILocation=${{ env.AZURE_LOCATION }}
-            --parameters solutionPrefix=${{ env.SOLUTION_PREFIX }} \
+            --parameters \
+              solutionPrefix='${{ env.SOLUTION_PREFIX }}' \
+              azureOpenAILocation='${{ env.AZURE_LOCATION }}' \
+              logAnalyticsWorkspaceConfiguration.dataRetentionInDays=30 \
+              logAnalyticsWorkspaceConfiguration.existingWorkspaceResourceId='' \
+              applicationInsightsConfiguration.retentionInDays=30 \
+              virtualNetworkConfiguration.enabled=false \
+              webServerFarmConfiguration.skuCapacity=1 \
+              webServerFarmConfiguration.skuName='B2'
 
 
       - name: Send Notification on Failure
