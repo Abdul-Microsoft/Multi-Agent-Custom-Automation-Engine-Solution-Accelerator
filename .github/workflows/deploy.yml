@@ -116,12 +116,10 @@ jobs:
             --parameters \
               solutionPrefix='${{ env.SOLUTION_PREFIX }}' \
               azureOpenAILocation='${{ env.AZURE_LOCATION }}' \
-              logAnalyticsWorkspaceConfiguration.dataRetentionInDays=30 \
-              logAnalyticsWorkspaceConfiguration.existingWorkspaceResourceId='' \
-              applicationInsightsConfiguration.retentionInDays=30 \
-              virtualNetworkConfiguration.enabled=false \
-              webServerFarmConfiguration.skuCapacity=1 \
-              webServerFarmConfiguration.skuName='B2'
+              logAnalyticsWorkspaceConfiguration='{"dataRetentionInDays": 30, "existingWorkspaceResourceId": ""}' \
+              applicationInsightsConfiguration='{"retentionInDays": 30}' \
+              virtualNetworkConfiguration='{"enabled": false}' \
+              webServerFarmConfiguration='{"skuCapacity": 1, "skuName": "B2"}'
 
 
       - name: Send Notification on Failure
