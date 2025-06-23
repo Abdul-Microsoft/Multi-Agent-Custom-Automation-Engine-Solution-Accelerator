@@ -98,7 +98,7 @@ jobs:
         id: generate_solution_prefix
         run: |
           set -e
-          COMMON_PART="psldg"
+          COMMON_PART="macae"
           TIMESTAMP=$(date +%s)  
           UPDATED_TIMESTAMP=$(echo $TIMESTAMP | tail -c 6) 
           UNIQUE_SOLUTION_PREFIX="${COMMON_PART}${UPDATED_TIMESTAMP}"
@@ -113,9 +113,12 @@ jobs:
           az deployment group create \
             --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
             --template-file infra/main.bicep \
-            --parameters infra/main.bicepparam \
             --parameters azureOpenAILocation=${{ env.AZURE_LOCATION }}
             --parameters solutionPrefix=${{ env.SOLUTION_PREFIX }} \
+            --parameters logAnalyticsWorkspaceConfiguration='{"dataRetentionInDays":30,"existingWorkspaceResourceId":""}' \
+            --parameters applicationInsightsConfiguration='{"retentionInDays":30}' \
+            --parameters virtualNetworkConfiguration='{"enabled":false}' \
+            --parameters webServerFarmConfiguration='{"skuCapacity":1,"skuName":"B2"}'
 
 
       - name: Send Notification on Failure
