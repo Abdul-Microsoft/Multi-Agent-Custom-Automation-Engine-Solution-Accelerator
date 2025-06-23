@@ -94,6 +94,18 @@ jobs:
           fi
 
 
+      - name: Generate Unique Solution Prefix
+        id: generate_solution_prefix
+        run: |
+          set -e
+          COMMON_PART="psldg"
+          TIMESTAMP=$(date +%s)  
+          UPDATED_TIMESTAMP=$(echo $TIMESTAMP | tail -c 6) 
+          UNIQUE_SOLUTION_PREFIX="${COMMON_PART}${UPDATED_TIMESTAMP}"
+          echo "SOLUTION_PREFIX=${UNIQUE_SOLUTION_PREFIX}" >> $GITHUB_ENV
+          echo "Generated SOLUTION_PREFIX: ${UNIQUE_SOLUTION_PREFIX}"
+
+
       - name: Deploy Bicep Template
         id: deploy
         run: |
@@ -103,6 +115,7 @@ jobs:
             --template-file infra/main.bicep \
             --parameters infra/main.waf-aligned.bicepparam \
             --parameters azureOpenAILocation=${{ env.AZURE_LOCATION }}
+            --parameters solutionPrefix=${{ env.SOLUTION_PREFIX }} \
 
 
       - name: Send Notification on Failure
